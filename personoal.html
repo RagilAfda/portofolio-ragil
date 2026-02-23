@@ -46,44 +46,21 @@
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
         }
 
-        /* --- Efek Lanyard (ID Card Berayun) --- */
-        .hanging-lanyard {
-            /* Titik tumpu ayunan berada 200px di atas kartu */
-            transform-origin: 50% -200px;
-            animation: sway 4s ease-in-out infinite alternate;
+        /* --- Animasi Mengambang (Float/Flying) --- */
+        @keyframes floatEffect {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
         }
         
-        @keyframes sway {
-            0% { transform: rotate(-5deg); }
-            100% { transform: rotate(5deg); }
+        .float-anim {
+            animation: floatEffect 4s ease-in-out infinite;
         }
-        
-        /* Desain Tali Lanyard */
-        .lanyard-strap {
-            position: absolute;
-            top: -300px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 22px;
-            height: 310px;
-            background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 20%, #2563eb 80%, #1e3a8a 100%);
-            z-index: 0;
-            box-shadow: 2px 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        /* Desain Jepitan Besi Lanyard */
-        .lanyard-strap::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 34px;
-            height: 18px;
-            background: linear-gradient(to bottom, #cbd5e1, #64748b);
-            border-radius: 4px;
-            border: 1px solid #475569;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+
+        /* --- Transisi Putaran 3D --- */
+        .spin-frame {
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efek memantul halus */
+            transform-style: preserve-3d;
         }
     </style>
 </head>
@@ -170,52 +147,39 @@
             </div>
 
             <!-- Foto / Visual (Kanan) -->
-            <div class="lg:col-span-5 relative flex justify-center lg:justify-end mt-12 lg:mt-0">
+            <div class="lg:col-span-5 relative flex justify-center lg:justify-end mt-12 lg:mt-0" style="perspective: 1000px;">
                 <!-- Dekorasi Background Aura Terang -->
                 <div class="absolute inset-0 bg-white/60 rounded-3xl transform rotate-3 scale-105 blur-2xl z-0"></div>
                 <div class="absolute inset-0 border border-white/50 rounded-3xl transform -rotate-3 z-0"></div>
                 
-                <!-- Frame Foto Utama: Lanyard Menggantung -->
-                <div class="relative z-10 w-full max-w-sm mx-auto lg:mr-0 hanging-lanyard mt-10">
-                    <!-- Tali Lanyard -->
-                    <div class="lanyard-strap"></div>
+                <!-- Wrapper untuk Animasi Float -->
+                <div class="relative z-10 w-full max-w-sm mx-auto lg:mr-0 mt-10 float-anim">
                     
-                    <!-- Card Holder ID -->
-                    <div class="relative bg-white/80 glass-effect rounded-2xl border border-white/80 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.3)] p-5 pb-6 pt-8 z-10 flex flex-col items-center">
-                        <!-- Lubang Jepitan (Hole) -->
-                        <div class="absolute top-3 w-16 h-3 bg-slate-200/50 rounded-full shadow-inner border border-white"></div>
+                    <!-- Frame Foto Interaktif (Bisa Berputar) -->
+                    <div id="profileFrame" class="relative bg-white/80 glass-effect rounded-[2rem] border-2 border-white shadow-2xl p-4 pb-6 cursor-pointer spin-frame group">
                         
-                        <!-- Header ID Card -->
-                        <div class="w-full text-center mb-4 mt-2">
-                            <p class="text-[10px] font-extrabold tracking-widest text-blue-700 uppercase">Politeknik Negeri Lampung</p>
-                            <p class="text-[9px] text-slate-500 font-mono mt-0.5">ID: RAGIL-2026</p>
-                        </div>
-
-                        <!-- Area Foto -->
-                        <div class="w-full aspect-[3/4] rounded-xl overflow-hidden border-4 border-white shadow-sm mb-5 bg-slate-100 relative group">
+                        <!-- Area Foto Utama -->
+                        <div class="w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-inner relative mb-4 bg-slate-100">
                             <!-- Foto Profil Anda -->
                             <img src="gambar/412280.jpg" alt="Foto Profil Ragil Afda" class="w-full h-full object-cover">
                             <!-- Efek pantulan cahaya (Glare) saat dihover -->
-                            <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                            <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
                         </div>
 
-                        <!-- Detail Nama di ID Card -->
-                        <h2 class="text-2xl font-extrabold text-slate-800 tracking-tight">Ragil Afda</h2>
-                        <p class="text-xs font-bold text-blue-600 uppercase tracking-widest mt-1">Network Engineer</p>
-                        
-                        <!-- Barcode Visual (Dekorasi) -->
-                        <div class="mt-6 w-3/4 h-8 flex items-center justify-center opacity-60">
-                            <div class="w-full h-full border-l-4 border-r-2 border-slate-800 flex justify-between">
-                                <div class="w-1 h-full bg-slate-800"></div>
-                                <div class="w-2 h-full bg-slate-800"></div>
-                                <div class="w-1 h-full bg-slate-800"></div>
-                                <div class="w-3 h-full bg-slate-800"></div>
-                                <div class="w-1 h-full bg-slate-800"></div>
-                                <div class="w-2 h-full bg-slate-800"></div>
-                                <div class="w-1 h-full bg-slate-800"></div>
-                            </div>
+                        <!-- Teks Penanda -->
+                        <div class="text-center">
+                            <h2 class="text-xl font-extrabold text-slate-800 tracking-tight">Ragil Afda</h2>
+                            <p class="text-xs font-bold text-blue-600 uppercase tracking-widest mt-1">Internet Engineer</p>
+                        </div>
+
+                        <!-- Indikator Interaksi: Ketuk Kiri/Kanan -->
+                        <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-3 bg-slate-800 text-white text-[10px] px-4 py-1.5 rounded-full shadow-lg pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Ketuk Kiri / Kanan</span>
+                            <i class="fas fa-arrow-right"></i>
                         </div>
                     </div>
+
                 </div>
             </div>
             
@@ -464,52 +428,64 @@
         <img id="modalImage" src="" alt="Full View Gambar" class="max-w-[90vw] max-h-[90vh] object-contain rounded-xl shadow-2xl scale-95 transition-transform duration-300">
     </div>
 
-    <!-- Script JavaScript untuk memfungsikan Modal -->
+    <!-- Script JavaScript -->
     <script>
+        // --- 1. Logika Modal Full View Foto ---
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImage');
         const btnClose = document.getElementById('closeModal');
 
-        // Fungsi membuka gambar
         function openModal(imageSrc) {
             modalImg.src = imageSrc;
             modal.classList.remove('hidden');
-            
-            // Sedikit delay agar transisi animasi terlihat mulus
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
                 modalImg.classList.remove('scale-95');
                 modalImg.classList.add('scale-100');
             }, 10);
-            
-            // Kunci layar agar tidak bisa di-scroll saat modal terbuka
             document.body.style.overflow = 'hidden';
         }
 
-        // Fungsi menutup gambar
         function closeModal() {
             modal.classList.add('opacity-0');
             modalImg.classList.remove('scale-100');
             modalImg.classList.add('scale-95');
-            
-            // Tunggu animasi selesai baru hilangkan elemennya
             setTimeout(() => {
                 modal.classList.add('hidden');
             }, 300);
-            
-            // Buka kembali scroll layar utama
             document.body.style.overflow = 'auto';
         }
 
-        // Tutup modal jika mengklik tombol X
         btnClose.addEventListener('click', closeModal);
-
-        // Tutup modal jika mengklik area gelap di sekitar gambar
         modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModal();
-            }
+            if (e.target === modal) closeModal();
         });
+
+
+        // --- 2. Logika Frame Profil Berputar ---
+        const profileFrame = document.getElementById('profileFrame');
+        let frameRotation = 0; // Sudut putaran saat ini
+
+        if (profileFrame) {
+            profileFrame.addEventListener('click', (e) => {
+                // Dapatkan posisi elemen dan posisi klik kursor
+                const rect = profileFrame.getBoundingClientRect();
+                const clickX = e.clientX - rect.left; // Koordinat klik relatif terhadap frame
+                const frameWidth = rect.width;
+
+                // Jika klik dilakukan di setengah bagian kanan
+                if (clickX > frameWidth / 2) {
+                    frameRotation += 360; // Berputar 360 derajat searah jarum jam
+                } 
+                // Jika klik dilakukan di setengah bagian kiri
+                else {
+                    frameRotation -= 360; // Berputar 360 derajat berlawanan arah jarum jam
+                }
+
+                // Terapkan putaran 3D pada elemen
+                profileFrame.style.transform = `rotateY(${frameRotation}deg)`;
+            });
+        }
     </script>
 </body>
 </html>
